@@ -1,0 +1,14 @@
+.options-div{
+    width:400px;
+    height: 130px;
+    background-color: white;
+    display:flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+    border-radius: 10px;
+    margin-top:-50px;
+}
+.div-options a{
+    text-decoration: none;
+}

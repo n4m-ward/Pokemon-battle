@@ -1,0 +1,9 @@
+body{
+    background-color:#363636;
+}
+#app{
+    width:400px;
+    margin:auto;
+    border-radius: 20px;
+    box-shadow: 2px 2px 2px black;
+}
