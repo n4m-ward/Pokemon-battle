@@ -5,47 +5,49 @@
 <link rel="stylesheet" href="style/battle.css">
 <link rel="stylesheet" href="style/menu.css">
 <link rel="stylesheet" href="style/layout.css">
-<div id="app">
-    <div id="battleDiv">
-        <img src="./images/mewtwo-back.png" id="pokeSprite">
-        <img src="./images/s-mewtwo-front.png" id="enemyPokeSprite">
-
-        <div class="statusBar p1">
-            <p class="pokeName">Mewtwo</p>
-            <p class="pokelvl">Lv100</p>
-            <div class="lifeBar">
-                <div class="lifeBarPercent" :style="{width:pokemon1LifeBar}"></div>
-                <p>100 / {{pokemon1.lifePoints}}</p>
+<body>
+    <div id="app">
+        <div id="battleDiv">
+            <img src="./images/mewtwo-back.png" id="pokeSprite" :style="pokemon1Css">
+            <img src="./images/s-mewtwo-front.png" id="enemyPokeSprite" :style="pokemon2Css">
+    
+            <div class="statusBar p1">
+                <p class="pokeName">Mewtwo</p>
+                <p class="pokelvl">Lv100</p>
+                <div class="lifeBar">
+                    <div class="lifeBarPercent" :style="pokemonlifeBar1css"></div>
+                    <p>100 / {{pokemon1.lifePoints}}</p>
+                </div>
+            </div>
+            <div class="statusBar p2">
+                <p class="pokeName">Sh. Mewtwo</p>
+                <p class="pokelvl">Lv100</p>
+                <div class="lifeBar">
+                    <div class="lifeBarPercent" :style="pokemonlifeBar2css"></div>
+                </div>
             </div>
         </div>
-        <div class="statusBar p2">
-            <p class="pokeName">Sh. Mewtwo</p>
-            <p class="pokelvl">Lv100</p>
-            <div class="lifeBar">
-                <div class="lifeBarPercent" :style="{width:pokemon2LifeBar}"></div>
-            </div>
+    
+        <div class="options-div">
+            <template v-if='endGame'>
+                <button  class="button" @click="giveUp"><h1>Start Game</h1></button>
+            </template>
+            <template v-if="menuPadrao">
+                <button    class="options button" @click="openAttackMenu()">Attack</button>
+                <button    class="options button" @click="openHealMenu()">Heal</button>
+                <button    class="options button" @click="giveUp()">Give Up</button>
+            </template>
+            <template v-if="attackMenu">
+                <button    class="options button" @click="iniciarAtk('quickAttack')">Quick Attack</button>
+                <button    class="options button" @click="iniciarAtk('hyperBeam')">Hyper Beam</button>
+                <button    class="options button" @click="openAttackMenu()">back</button>
+            </template>
+            <template v-if="healMenu">
+                <button    class="options button" @click="heal('potion')">Potion</button>
+                <button    class="options button" @click="heal('hyperPotion')">Hyper potion</button>
+                <button    class="options button" @click="openHealMenu()">back</button>
+            </template>
         </div>
     </div>
-
-    <div class="options-div">
-        <template v-if='endGame'>
-            <button  class="button" @click="giveUp"><h1>Start Game</h1></button>
-        </template>
-        <template v-if="menuPadrao">
-            <button    class="options button" @click="openAttackMenu()">Attack</button>
-            <button    class="options button" @click="openHealMenu()">Heal</button>
-            <button    class="options button" @click="giveUp()">Give Up</button>
-        </template>
-        <template v-if="attackMenu">
-            <button    class="options button" @click="iniciarAtk('quickAttack')">Quick Attack</button>
-            <button    class="options button" @click="iniciarAtk('hyperBeam')">Hyper Beam</button>
-            <button    class="options button" @click="openAttackMenu()">back</button>
-        </template>
-        <template v-if="healMenu">
-            <button    class="options button" @click="heal()">Potion</button>
-            <button    class="options button" @click="heal()">Hyper potion</button>
-            <button    class="options button" @click="openHealMenu()">back</button>
-        </template>
-    </div>
-</div>
+</body>
 <script src="script/vue.js"></script>

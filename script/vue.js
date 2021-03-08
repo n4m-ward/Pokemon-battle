@@ -7,13 +7,20 @@ new Vue({
         healMenu:false,
         poke1LifePoints:100,
         poke2LifePoints:100,
-        width1: '100%',
-        width2: '100%',
+        poke1opacity:10,
+        poke2opacity:10,
+        poke1marginb:0,
+        poke1marginl:80,
+        poke2marginr:0,
+        poke2margint:0,
+        hyperPotionIsUsed:false,
         pokemon1:{
             name:'Mewtwo',
             lvl:100,
             lifePoints:100,
             quickAttack: 10,
+            potion: 10,
+            hyperPotion:30,
             hyperBeam: 20
         },
         pokemon2:{
@@ -23,11 +30,26 @@ new Vue({
         }
     },
     computed:{
-        pokemon1LifeBar(){
-            return this.pokemon1.lifePoints + '%'
+        pokemonlifeBar1css(){
+            return {
+                width:this.pokemon1.lifePoints + '%',
+
+            }
         },
-        pokemon2LifeBar(){
-            return this.pokemon2.lifePoints + '%'
+        pokemonlifeBar2css(){
+            return {
+                width:this.pokemon2.lifePoints + '%'
+            }
+        },
+        pokemon1Css(){
+            return {
+                opacity:(this.poke1opacity / 10)
+            }
+        },
+        pokemon2Css(){
+            return {
+                opacity:(this.poke2opacity / 10)
+            }
         }
     },
     methods:{
@@ -43,27 +65,73 @@ new Vue({
             this.menuPadrao = !this.menuPadrao;
             this.healMenu = !this.healMenu;
         },
-        attack(){
-            alert('atacando')
-        },
-        heal(){
-            alert('curando')
+        heal(potion){
+            if(potion == 'hyperPotion'){
+                if(this.hyperPotionIsUsed == false){
+                    this.pokemon1.lifePoints += this.pokemon1[potion];
+                    this.hyperPotionIsUsed = true;
+                }else{
+                    alert('Voce não pode usar a Hyper potion mais de uma vez!')
+                    return 
+                }
+            }else{
+                this.pokemon1.lifePoints += this.pokemon1[potion];
+            }
+            console.log(`heal: ${this.pokemon1[potion]}`)
+            this.pokemon1.lifePoints = this.pokemon1.lifePoints > 100 ? 100 : this.pokemon1.lifePoints
+            this.diminuirVidaPoke(this.pokemon1,16) 
         },
         diminuirVidaPoke(pokemon,atkPoints){;
-            let { lifePoints } = pokemon;
             let damage = Math.floor(Math.random() * atkPoints)
             console.log(`${pokemon.name} damage : ${damage}`)
-            const temporizador = setInterval(()=>{
-                pokemon.lifePoints -=1;
-                if(pokemon.lifePoints == lifePoints - damage) clearInterval(temporizador)
-            },100)
+
+            //pokemon.name != 'Mewtwo' ? this.animationAtk1() : this.animationAtk2();
+            pokemon.lifePoints -= damage;
+            pokemon.lifePoints = pokemon.lifePoints > 0 ? pokemon.lifePoints : 0;
+            if(pokemon.lifePoints == 0){
+                pokemon.name == 'Mewtwo' ? alert('Voce perdeu!') : alert('voce ganhou!')
+                this.endGame = true
+                this.menuPadrao = false
+                this.attackMenu = false
+                this.healMenu = false
+                this.pokemon1.lifePoints = 100
+                this.pokemon2.lifePoints = 100
+            }
         },
         async iniciarAtk(atk){
-            let atkPoint = this.pokemon1[atk];
-            let enemyAtkPoint = 14
+            let atkPoint = atk ? this.pokemon1[atk] : 16;
 
-            await this.diminuirVidaPoke(this.pokemon1,atkPoint)
-            await this.diminuirVidaPoke(this.pokemon2,enemyAtkPoint)
+            this.diminuirVidaPoke(this.pokemon2,atkPoint)
+            this.diminuirVidaPoke(this.pokemon1,atkPoint)  
+        },
+        animationAtk1(){
+            const temporizador1 = setInterval(()=>{
+                this.poke2opacity -= 1;
+                if(this.poke2opacity == 0){
+                    const temporizador2 = setInterval(()=>{
+                        this.poke2opacity += 1;
+                        if(this.poke2opacity == 10) {
+                            clearInterval(temporizador2) 
+                            clearInterval(temporizador1)
+                        }
+                    },100)
+                }
+            },100)
+        },
+        animationAtk2(){
+            const temporizador1 = setInterval(()=>{
+                this.poke1opacity -= 1;
+                if(this.poke1opacity == 0){
+                    const temporizador2 = setInterval(()=>{
+                        this.poke1opacity += 1;
+                        if(this.poke1opacity == 10) {
+                            clearInterval(temporizador2) 
+                            clearInterval(temporizador1)
+                        }
+                    },100)
+                }
+            },100)
+            
         }
     }
 })
