@@ -98,8 +98,8 @@
                         <hr>
                         <div id="pokeLista">
                             <div v-for="pokemon in pokemons" class="onePoke">
-                                <img :src="pokemon.front">
                                 <label class="checkbox">
+                                    <img :src="pokemon.front">
                                     <input type="checkbox" @change="criarTime(pokemon.name)">
                                   </label>
                             </div>
