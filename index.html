@@ -8,46 +8,108 @@
 <body>
     <div id="app">
         <div id="battleDiv">
-            <img src="./images/mewtwo-back.png" id="pokeSprite" :style="pokemon1Css">
-            <img src="./images/s-mewtwo-front.png" id="enemyPokeSprite" :style="pokemon2Css">
+            <img :src="pokemonAtual.back" id="pokeSprite" :style="pokemon1Css">
+            <img :src="pokemonInimigoAtual.front" id="enemyPokeSprite" :style="pokemon2Css">
     
             <div class="statusBar p1">
-                <p class="pokeName">Mewtwo</p>
+                
+                <p class="pokeName">{{pokemonAtual.name}}</p>
                 <p class="pokelvl">Lv100</p>
                 <div class="lifeBar">
                     <div class="lifeBarPercent" :style="pokemonlifeBar1css"></div>
-                    <p>100 / {{pokemon1.lifePoints}}</p>
+                    <div class="pokebolaDiv">
+                        <img src="./images/pokebola.png" alt="pokebola" class="pokebola" v-for="pokebola in time">
+                    </div>
+                    <p>100 / {{pokemonAtual.hp}}</p>
                 </div>
             </div>
             <div class="statusBar p2">
-                <p class="pokeName">Sh. Mewtwo</p>
+                <div class="pokebolaDiv">
+                    
+                </div>
+                <p class="pokeName">{{pokemonInimigoAtual.name}}</p>
                 <p class="pokelvl">Lv100</p>
                 <div class="lifeBar">
                     <div class="lifeBarPercent" :style="pokemonlifeBar2css"></div>
+                    <div class="pokebolaDiv">
+                        <img src="./images/pokebola.png" alt="pokebola" class="pokebola" v-for="pokebola in time">
+                    </div>
+                    <p>100 / {{pokemonInimigoAtual.hp}}</p>
                 </div>
             </div>
         </div>
     
         <div class="options-div">
             <template v-if='endGame'>
-                <button  class="button" @click="giveUp"><h1>Start Game</h1></button>
+                <button  class="button" @click="start"><h1>Start Game</h1></button>
             </template>
             <template v-if="menuPadrao">
                 <button    class="options button" @click="openAttackMenu()">Attack</button>
+                <button    class="options button" @click="showAlert()">Pokemon</button>
                 <button    class="options button" @click="openHealMenu()">Heal</button>
-                <button    class="options button" @click="giveUp()">Give Up</button>
+                <button    class="options button" @click="giveUp('desistiu')">Give Up</button>
             </template>
+
             <template v-if="attackMenu">
-                <button    class="options button" @click="iniciarAtk('quickAttack')">Quick Attack</button>
-                <button    class="options button" @click="iniciarAtk('hyperBeam')">Hyper Beam</button>
+                <button
+                v-for="(atk, key) in pokemonAtual.attack "
+                :key="key"
+                class="options button" 
+                @click="iniciarAtk(atk)">
+                {{key}}
+            </button>
+                <button class="options button" @click="openAttackMenu()">back</button>
+            </template>
+
+            <template v-if="pokemonMenu">
+                <template 
+                v-for="(pokemon,key) in time"
+                >
+                    <button class="options button" @click="showAlert()">{{key}}</button>
+                </template>
                 <button    class="options button" @click="openAttackMenu()">back</button>
             </template>
             <template v-if="healMenu">
-                <button    class="options button" @click="heal('potion')">Potion</button>
-                <button    class="options button" @click="heal('hyperPotion')">Hyper potion</button>
+                <template>
+                    <button
+                    v-for="(healItem, key) in healItems"
+                    :key="key"    
+                    class="options button"
+                    @click="heal(key)"
+                    >
+                    {{key}}
+                </button>
+                </template>
                 <button    class="options button" @click="openHealMenu()">back</button>
             </template>
         </div>
+        <div class="logDiv">
+
+        </div>
+        <div class="modal is-active" v-if="displayModal">
+            <div class="modal-background"></div>
+            <div class="modal-content">
+                <div class="card">
+                    <div class="card-content">
+                      <div class="content">
+                        <h2>Escolha seu time! (3 pokemons)</h2>
+                        <hr>
+                        <div id="pokeLista">
+                            <div v-for="pokemon in pokemons" class="onePoke">
+                                <img :src="pokemon.front">
+                                <label class="checkbox">
+                                    <input type="checkbox" @change="criarTime(pokemon.name)">
+                                  </label>
+                            </div>
+                        </div>
+                        <button class="button is-primary is-outlined" @click="confirmarTime">Confirmar Time</button>
+                      </div>
+                    </div>
+                  </div>
+            </div>
+            <button class="modal-close is-large" aria-label="close" @click="openModal"></button>
+          </div>
     </div>
 </body>
+<script src="./script/pokemon.js"></script>
 <script src="script/vue.js"></script>

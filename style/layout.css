@@ -5,5 +5,20 @@ body{
     width:400px;
     margin:0 auto;
     border-radius: 20px;
-    box-shadow: 2px 2px 2px black;
+}
+#pokeLista{
+    display:flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+.onePoke{
+    margin:10px;
+    box-shadow: 1px 1px 1px 1px #d0d0d0;
+    border-radius: 10px;    
+}
+.logDiv{
+    width:400px;
+    margin:auto;
+    height: 200px;
+    overflow: auto;
 }

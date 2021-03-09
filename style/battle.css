@@ -58,3 +58,12 @@
     background-color:green;
     border-radius: 10px;
 }
+.pokebola{
+    width:12px;
+    margin:3px;
+    float:left;
+}
+#pokebolaDiv{
+    display:flex;
+    flex-wrap: wrap;
+}
