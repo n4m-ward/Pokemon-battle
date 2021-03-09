@@ -84,7 +84,9 @@
             </template>
         </div>
         <div class="logDiv">
-
+            <div v-for="message in bottomLogMessages" class="bottomMessages">
+                <p>{{message}}</p>
+            </div>
         </div>
         <div class="modal is-active" v-if="displayModal">
             <div class="modal-background"></div>

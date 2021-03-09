@@ -219,6 +219,208 @@ new Vue({
                 defeated:false
             }
         },
+        enemyPokemons:{
+            dialga:{
+                name:'dialga',
+                hp:100,
+                front:'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/483.png',
+                back:'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/483.png',
+                attack:{
+                    cut:{
+                        atk:20,
+                        pp:20
+                    },
+                    headbutt:{
+                        atk:30,
+                        pp:10
+                    },
+                    flamethrower:{
+                        atk:40,
+                        pp:3
+                    },
+                    iceBeam:{
+                        atk:50,
+                        pp:2
+                    }
+                },
+                defeated:false
+            },
+            mewtwo:{
+                name:'mewtwo',
+                hp:100,
+                front:'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/150.png',
+                back:'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/150.png',
+                attack:{
+                    takeDown:{
+                        atk:20,
+                        pp:20
+                    },
+                    headbutt:{
+                        atk:30,
+                        pp:10
+                    },
+                    megaPunch:{
+                        atk:40,
+                        pp:3
+                    },
+                    thunderPunch:{
+                        atk:50,
+                        pp:2
+                    }
+                },
+                defeated:false
+            },
+            celebi:{
+                name:'celebi',
+                hp:100,
+                front:'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/251.png',
+                back:'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/251.png',
+                attack:{
+                    confusion:{
+                        atk:20,
+                        pp:20
+                    },
+                    psychic:{
+                        atk:30,
+                        pp:10
+                    },
+                    megaPunch:{
+                        atk:40,
+                        pp:3
+                    },
+                    solarBeam:{
+                        atk:50,
+                        pp:2
+                    }
+                },
+                defeated:false
+            },
+            entei:{
+                name:'entei',
+                hp:100,
+                front:'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/244.png',
+                back:'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/244.png',
+                attack:{
+                    cut:{
+                        atk:20,
+                        pp:20
+                    },
+                    bite:{
+                        atk:30,
+                        pp:10
+                    },
+                    headbutt:{
+                        atk:40,
+                        pp:3
+                    },
+                    flamethrower:{
+                        atk:50,
+                        pp:2
+                    }
+                },
+                defeated:false
+            },
+            palkia:{
+                name:'palkia',
+                hp:100,
+                front:'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/484.png',
+                back:'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/484.png',
+                attack:{
+                    cut:{
+                        atk:20,
+                        pp:20
+                    },
+                    headbutt:{
+                        atk:30,
+                        pp:10
+                    },
+                    surf:{
+                        atk:40,
+                        pp:3
+                    },
+                    blizzard:{
+                        atk:50,
+                        pp:2
+                    }
+                },
+                defeated:false
+            },
+            lucario:{
+                name:'lucario',
+                hp:100,
+                front:'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/448.png',
+                back:'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/448.png',
+                attack:{
+                    quickAttack:{
+                        atk:20,
+                        pp:20
+                    },
+                    psychic:{
+                        atk:30,
+                        pp:10
+                    },
+                    auraSphere:{
+                        atk:40,
+                        pp:3
+                    },
+                    earthquake:{
+                        atk:50,
+                        pp:2
+                    }
+                },
+                defeated:false
+            },
+            darkrai:{
+                name:'darkrai',
+                hp:100,
+                front:'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/491.png',
+                back:'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/491.png',
+                attack:{
+                    cut:{
+                        atk:20,
+                        pp:20
+                    },
+                    headbutt:{
+                        atk:30,
+                        pp:10
+                    },
+                    iceBeam:{
+                        atk:40,
+                        pp:3
+                    },
+                    darkPulse:{
+                        atk:50,
+                        pp:2
+                    }
+                },
+                defeated:false
+            },
+            zekrom:{
+                name:'zekrom',
+                hp:100,
+                front:'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/644.png',
+                back:'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/644.png',
+                attack:{
+                    cut:{
+                        atk:20,
+                        pp:20
+                    },
+                    fly:{
+                        atk:30,
+                        pp:10
+                    },
+                    thunderPunch:{
+                        atk:40,
+                        pp:3
+                    },
+                    darkPulse:{
+                        atk:50,
+                        pp:2
+                    }
+                },
+                defeated:false
+            }
+        },
         pokemonsAdicionados: [],
         time:[],
         timeInimigo: [],
@@ -257,6 +459,9 @@ new Vue({
             if(resultado == 'desistiu') alert('Voce Desistiu!')
             this.resetar()
         },
+        resetar(){
+            location.reload()
+        },
         start(){
             this.endGame = !this.endGame
             this.menuPadrao = !this.menuPadrao
@@ -277,16 +482,17 @@ new Vue({
         heal: function(item){
             let potion = this.healItems[item];
             if(potion.quantity != 0){
-                this.pokemon1.lifePoints += potion.hp;
-                this.pokemon1.lifePoints = this.pokemon1.lifePoints > 100 ? 100 : this.pokemon1.lifePoints
+                this.pokemonAtual.hp += potion.hp;
+                this.pokemonAtual.hp = this.pokemonAtual.hp > 100 ? 100 : this.pokemonAtual.hp
             }else{
                 alert('Limite de potion atingido!')
             }
         },
-        diminuirVidaPoke(pokemon,golpe){
+        diminuirVidaPoke(pokemon,golpe,enemy){
             let { pp, atk } = golpe
             console.log(`pp: ${pp} | atk: ${atk}`)
             let damage = Math.floor(Math.random() * atk)
+            this.setBattleLog('damage',golpe,damage,enemy)
             if(golpe.pp == 0){
                 alert('limite de golpes excedido!')
                 return
@@ -300,7 +506,7 @@ new Vue({
             }
         },
         iniciarAtk(golpe){
-            this.diminuirVidaPoke(this.pokemonInimigoAtual,golpe)  
+            this.diminuirVidaPoke(this.pokemonInimigoAtual,golpe,false)  
             this.verificarTrocaDePokemonInimigo()
             this.iniciarAtkPokemon2()
             this.verificarTrocaDePokemon()
@@ -312,7 +518,7 @@ new Vue({
             let index = Math.floor(Math.random() * 4)
             let attacks =  Object.entries(attacksObj);
             let golpe = attacks[index][1]
-            this.diminuirVidaPoke(this.pokemonAtual,golpe)
+            this.diminuirVidaPoke(this.pokemonAtual,golpe,true)
         },
         openModal(){
             this.displayModal = !this.displayModal
@@ -324,11 +530,12 @@ new Vue({
             }else{
                 this.pokemonsAdicionados.push(nomePokemon)
             }
-            console.log(this.pokemonsAdicionados);
         },
         confirmarTime(){
             if(this.pokemonsAdicionados.length < 3 || this.pokemonsAdicionados.length > 3){
-                alert('Voce precisa selecionar 3 pokemons!')
+                let pokemonsAdicionados = this.pokemonsAdicionados.length;
+                alert(`Voce precisa selecionar 3 pokemons! foram adicionados ${pokemonsAdicionados} Pokemons!`)
+                return
             }else{
                 this.pokemonsAdicionados.forEach(pkm =>{
                     this.time.push(this.pokemons[pkm])
@@ -350,7 +557,7 @@ new Vue({
                     index = Math.floor(Math.random() * 8)
                 }
                 console.log(`index: ${index}`)
-                this.timeInimigo.push(this.pokemons[pokemonsinimigos[index]])
+                this.timeInimigo.push(this.enemyPokemons[pokemonsinimigos[index]])
             }
              console.log('time inimigo: ')
              console.log(this.timeInimigo)
@@ -381,16 +588,43 @@ new Vue({
             
         },
         verificarTrocaDePokemon(){
-            if(this.pokemonAtual.defeated) this.setAtualPokemon()
+            if(this.pokemonAtual.defeated){
+                this.setBattleLog('defeated',0,0,false)
+                this.setAtualPokemon()
+            } 
         },
         verificarTrocaDePokemonInimigo(){
-            if(this.pokemonInimigoAtual.defeated) this.setAtualPokemonInimigo()
-        },
-        resetar(){
-            location.reload()
+            if(this.pokemonInimigoAtual.defeated){
+                this.setBattleLog('defeated',0,0,true)
+                this.setAtualPokemonInimigo()
+            } 
         },
         showAlert(){
             alert('ainda nao conclui essa função :D')
+        },
+        setBattleLog(type,golpe,dano,enemy){
+            let pokemon = enemy ? this.pokemonInimigoAtual : this.pokemonAtual
+            let {name} = pokemon 
+            let message = ''
+            if(type == 'heal'){
+                let { quantidade } = this.healItems[golpe]
+                message = `Voce usou ${golpe}, e ${name} recuperou ${quantidade} pontos de vida!`
+            }
+            if(type == 'damage'){
+                console.log(golpe)
+                let nomeGolpe = ''
+                let attackKeys = Object.keys(pokemon.attack)
+                attackKeys.forEach(value =>{
+                    if(pokemon.attack[value] == golpe){
+                         nomeGolpe = value;
+                    }
+                })
+                message = `${name} usou ${nomeGolpe} e causou ${dano} de dano!`
+            }
+            if(type == 'defeated'){
+                message = `${name} Desmaiou!`
+            }
+            this.bottomLogMessages.unshift(message)
         }
     }
 })
