@@ -490,8 +490,8 @@ new Vue({
         },
         diminuirVidaPoke(pokemon,golpe,enemy){
             let { pp, atk } = golpe
-            console.log(`pp: ${pp} | atk: ${atk}`)
             let damage = Math.floor(Math.random() * atk)
+            damage == 0 ? damage = 1 : damage
             this.setBattleLog('damage',golpe,damage,enemy)
             if(golpe.pp == 0){
                 alert('limite de golpes excedido!')
@@ -508,10 +508,12 @@ new Vue({
         iniciarAtk(golpe){
             this.diminuirVidaPoke(this.pokemonInimigoAtual,golpe,false)  
             this.verificarTrocaDePokemonInimigo()
-            this.iniciarAtkPokemon2()
-            this.verificarTrocaDePokemon()
-            if(this.pokemonAtual.hp == 0) this.giveUp('perdeu')
-            if(this.pokemonInimigoAtual.hp == 0) this.giveUp('ganhou')
+            setTimeout(()=>{
+                this.iniciarAtkPokemon2()
+                this.verificarTrocaDePokemon()
+                if(this.pokemonAtual.hp == 0) this.giveUp('perdeu')
+                if(this.pokemonInimigoAtual.hp == 0) this.giveUp('ganhou')
+            },1000)
         },
         iniciarAtkPokemon2(){
             let attacksObj = this.pokemonInimigoAtual.attack
@@ -541,7 +543,6 @@ new Vue({
                     this.time.push(this.pokemons[pkm])
                 })
             }
-            console.log(this.time)
             this.criarTimeInimigo()
             this.openModal()
             this.setAtualPokemon();
@@ -556,31 +557,24 @@ new Vue({
                 while(indexUsados.indexOf(index) == -1){
                     index = Math.floor(Math.random() * 8)
                 }
-                console.log(`index: ${index}`)
                 this.timeInimigo.push(this.enemyPokemons[pokemonsinimigos[index]])
             }
-             console.log('time inimigo: ')
-             console.log(this.timeInimigo)
         },
         setAtualPokemon(){
-            let defeated = []
             if(this.time){
                 this.time.forEach(pokemon =>{
                     if(!pokemon.defeated){
                         this.pokemonAtual = pokemon
-                        defeated.push('defeated')
                         return
                     }
                 })
             }
         },
         setAtualPokemonInimigo(){
-            let defeated = []
             if(this.timeInimigo){
                 this.timeInimigo.forEach(pokemon =>{
                     if(!pokemon.defeated){
                         this.pokemonInimigoAtual = pokemon
-                        defeated.push('1')
                         return
                     }
                 })
@@ -611,7 +605,6 @@ new Vue({
                 message = `Voce usou ${golpe}, e ${name} recuperou ${quantidade} pontos de vida!`
             }
             if(type == 'damage'){
-                console.log(golpe)
                 let nomeGolpe = ''
                 let attackKeys = Object.keys(pokemon.attack)
                 attackKeys.forEach(value =>{
