@@ -427,9 +427,17 @@ new Vue({
         pokemonAtual: {},
         pokemonInimigoAtual: {},
         bottomLogMessages:[],
-        poke1opacity: 10,
-        poke2opacity: 10
+        pokebolaAtual: [],
+        pokebolaInimiga: []
 
+    },
+    watch:{
+        pokebolaAtual(antigo,novo){
+            this.animacaoDiminuirPokebola(false,novo)
+        },
+        pokebolaInimiga(antigo,novo){
+            this.animacaoDiminuirPokebola(true,novo)
+        }
     },
     computed:{
         pokemonlifeBar1css(){
@@ -456,13 +464,16 @@ new Vue({
     },
     methods:{
         giveUp(resultado){
-            if(resultado == 'ganhou') alert('Voce Ganhou!')
-            if(resultado == 'perdeu') alert('Voce Perdeu!')
-            if(resultado == 'desistiu') alert('Voce Desistiu!')
-            this.resetar()
+            setTimeout(()=>{
+                if(resultado == 'ganhou') alert('Voce Ganhou!')
+                if(resultado == 'perdeu') alert('Voce Perdeu!')
+                this.resetar()
+            },500)
         },
         resetar(){
-            location.reload()
+            setTimeout(()=>{
+                location.reload()
+            },1000)
         },
         start(){
             this.endGame = !this.endGame
@@ -490,13 +501,17 @@ new Vue({
                 alert('Limite de potion atingido!')
             }
         },
+        disabled(pokemon){
+            if(this.pokemonAtual == pokemon) return true
+            if(pokemon.defeated) return true
+        },
         diminuirVidaPoke(pokemon,golpe,enemy){
-            let { pp, atk } = golpe
+            let { atk } = golpe
             let damage = Math.floor(Math.random() * atk)
             damage == 0 ? damage = 1 : damage
             this.setBattleLog('damage',golpe,damage,enemy)
             if(golpe.pp == 0){
-                alert('limite de golpes excedido!')
+                if(!enemy) alert('limite de golpes excedido!')
                 return
             }else{
                 pokemon.hp -= damage
@@ -505,6 +520,7 @@ new Vue({
             }
             if(pokemon.hp == 0){
                 pokemon.defeated = true
+                enemy ? this.pokebolaInimiga.push(1) : this.pokebolaAtual.push(1)
             }
         },
         iniciarAtk(golpe){
@@ -536,9 +552,9 @@ new Vue({
             }
         },
         confirmarTime(){
-            if(this.pokemonsAdicionados.length < 3 || this.pokemonsAdicionados.length > 3){
+            if(this.pokemonsAdicionados.length < 3 || this.pokemonsAdicionados.length > 6){
                 let pokemonsAdicionados = this.pokemonsAdicionados.length;
-                alert(`Voce precisa selecionar 3 pokemons! foram adicionados ${pokemonsAdicionados} Pokemons!`)
+                alert(`Voce precisa selecionar Entre 3 a 6 pokemons! foram adicionados ${pokemonsAdicionados} Pokemons!`)
                 return
             }else{
                 this.pokemonsAdicionados.forEach(pkm =>{
@@ -547,13 +563,14 @@ new Vue({
             }
             this.criarTimeInimigo()
             this.openModal()
-            this.setAtualPokemon();
+            this.setAtualPokemon()
             this.setAtualPokemonInimigo()
         },
         criarTimeInimigo(){
             let pokemonsinimigos = ['dialga','palkia','mewtwo','celebi','entei','lucario','darkrai','zekrom']
             let indexUsados = [];
-            for(let i = 0; i < 3; i++){
+            let quantidadeDePokemons = this.time.length;
+            for(let i = 0; i < quantidadeDePokemons; i++){
                 var index = Math.floor(Math.random() * 8)
                 indexUsados.push(index)
                 while(indexUsados.indexOf(index) == -1){
@@ -567,14 +584,25 @@ new Vue({
             pokemon.back = './images/pokebola.gif'
             setTimeout( ()=>{
                 pokemon.back = back
-            },850)
+            },830)
         },
         animacaoTrocaDePokemonInimigo(pokemon){
             const front = pokemon.front
             pokemon.front = './images/pokebola.gif'
+            console.log('chegou aq')
             setTimeout( ()=>{
+                console.log('dentro do timeout')
                 pokemon.front = front
-            },850)
+            },830)
+        },
+        animacaoDiminuirPokebola(enemy,array){
+            let pokenumbers = array.length
+            let className = enemy ? 'pokebola' : 'pokebolaInimiga' 
+
+            let pokebolas = document.getElementsByClassName(className)
+            for(let i = 0; i < pokenumbers; i++){
+                pokebolas[i].style.opacity = '0.2'
+            }
         },
         setAtualPokemon(){
             if(this.time){
@@ -593,7 +621,7 @@ new Vue({
                     if(!pokemon.defeated){
                         this.pokemonInimigoAtual = pokemon
                         this.animacaoTrocaDePokemonInimigo(pokemon)
-                        return
+                        return false
                     }
                 })
             }
@@ -635,7 +663,14 @@ new Vue({
             if(type == 'defeated'){
                 message = `${name} Desmaiou!`
             }
+            if(type == 'choose') message = `${this.pokemonAtual.name} eu escolho voce`
             this.bottomLogMessages.unshift(message)
+        },
+        trocarPokemon(pokemon){
+            !pokemon.fainted ? this.pokemonAtual = pokemon : alert('Não é possivel escolher um pokemon morto')
+            this.animacaoTrocaDePokemon(pokemon)
+            this.setBattleLog('choose',0,0,false)
+            this.iniciarAtkPokemon2()
         }
     }
 })

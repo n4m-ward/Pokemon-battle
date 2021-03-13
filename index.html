@@ -24,15 +24,12 @@
                 </div>
             </div>
             <div class="statusBar p2">
-                <div class="pokebolaDiv">
-                    
-                </div>
                 <p class="pokeName">{{pokemonInimigoAtual.name}}</p>
                 <p class="pokelvl">Lv100</p>
                 <div class="lifeBar">
                     <div class="lifeBarPercent" :style="pokemonlifeBar2css"></div>
                     <div class="pokebolaDiv">
-                        <img src="./images/pokebola.png" alt="pokebola" class="pokebola" v-for="pokebola in time">
+                        <img src="./images/pokebola.png" alt="pokebola" class="pokebolaInimiga" v-for="pokebola in timeInimigo">
                     </div>
                     <p>100 / {{pokemonInimigoAtual.hp}}</p>
                 </div>
@@ -45,7 +42,7 @@
             </template>
             <template v-if="menuPadrao">
                 <button    class="options button" @click="openAttackMenu()">Attack</button>
-                <button    class="options button" @click="showAlert()">Pokemon</button>
+                <button    class="options button" @click="openPokemonMenu()">Pokemon</button>
                 <button    class="options button" @click="openHealMenu()">Heal</button>
                 <button    class="options button" @click="giveUp('desistiu')">Give Up</button>
             </template>
@@ -81,9 +78,16 @@
                 <template 
                 v-for="(pokemon,key) in time"
                 >
-                    <button class="options button" @click="showAlert()">{{key}}</button>
+                    <button 
+                    class="options button"
+                    :disabled="disabled(pokemon)"
+                    @click="trocarPokemon(pokemon)"
+                     
+                    >
+                      <img :src="pokemon.front" :alt="pokemon.name" style="width:40px">
+                      <span>{{pokemon.name}}</span></button>
                 </template>
-                <button    class="options button" @click="openAttackMenu()">back</button>
+                <button    class="options button" @click="openPokemonMenu()">back</button>
             </template>
 
             <template v-if="healMenu">
@@ -124,7 +128,7 @@
                 <div class="card">
                     <div class="card-content">
                       <div class="content">
-                        <h2>Escolha seu time! (3 pokemons)</h2>
+                        <h2>Escolha seu time! (3 a 6 pokemons)</h2>
                         <hr>
                         <div id="pokeLista">
                             <div v-for="pokemon in pokemons" class="onePoke">
