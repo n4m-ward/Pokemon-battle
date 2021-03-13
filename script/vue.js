@@ -426,7 +426,9 @@ new Vue({
         timeInimigo: [],
         pokemonAtual: {},
         pokemonInimigoAtual: {},
-        bottomLogMessages:[]
+        bottomLogMessages:[],
+        poke1opacity: 10,
+        poke2opacity: 10
 
     },
     computed:{
@@ -498,6 +500,7 @@ new Vue({
                 return
             }else{
                 pokemon.hp -= damage
+                this.animacaoPokemonDamage(enemy)
                 golpe.pp -=1
                 pokemon.hp < 0 ? pokemon.hp = 0 : pokemon.hp
             }
@@ -560,11 +563,58 @@ new Vue({
                 this.timeInimigo.push(this.enemyPokemons[pokemonsinimigos[index]])
             }
         },
+        animacaoTrocaDePokemon(pokemon){
+            const back = pokemon.back
+            pokemon.back = './images/pokebola.gif'
+            setTimeout( ()=>{
+                pokemon.back = back
+            },850)
+        },
+        animacaoTrocaDePokemonInimigo(pokemon){
+            const front = pokemon.front
+            pokemon.front = './images/pokebola.gif'
+            setTimeout( ()=>{
+                pokemon.front = front
+            },850)
+        },
+        animacaoPokemonDamage(enemy){
+            if(enemy){
+                let intervalo = setInterval(() => {
+                    this.poke2opacity -= 5
+                    if(this.poke2opacity <= 0) this.poke2opacity = 0
+                    console.log(this.poke2opacity)
+                    if(this.poke2opacity == 0) clearInterval(intervalo)
+                }, 50);
+                setTimeout(()=>{
+                    let intervalo2 = setInterval(() => {
+                        if(this.poke2opacity >= 10) this.poke2opacity = 10
+                        if(this.poke2opacity == 10) clearInterval(intervalo2)
+                    }, 50);
+                },500)
+            }else{
+
+                let intervalo = setInterval(() => {
+                    this.poke1opacity -= 5
+                    if(this.poke1opacity <= 0) this.poke1opacity = 0
+                    console.log(this.poke1opacity)
+                    if(this.poke1opacity == 0) clearInterval(intervalo)
+                }, 50);
+                setTimeout(()=>{
+                    let intervalo2 = setInterval(() => {
+                        this.poke1opacity += 5
+                        if(this.poke1opacity >= 10) this.poke1opacity = 10
+                        if(this.poke1opacity == 10) clearInterval(intervalo2)
+                    }, 50); 
+                },500)
+            }
+
+        },
         setAtualPokemon(){
             if(this.time){
                 this.time.forEach(pokemon =>{
                     if(!pokemon.defeated){
                         this.pokemonAtual = pokemon
+                        this.animacaoTrocaDePokemon(pokemon)
                         return
                     }
                 })
@@ -575,6 +625,7 @@ new Vue({
                 this.timeInimigo.forEach(pokemon =>{
                     if(!pokemon.defeated){
                         this.pokemonInimigoAtual = pokemon
+                        this.animacaoTrocaDePokemonInimigo(pokemon)
                         return
                     }
                 })
