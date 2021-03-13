@@ -492,9 +492,10 @@ new Vue({
             this.healMenu = !this.healMenu;
             this.attackMenu = false;
         },
-        heal: function(item){
+        heal(item){
             let potion = this.healItems[item];
             if(potion.quantity != 0){
+                potion.quantity--
                 this.pokemonAtual.hp += potion.hp;
                 this.pokemonAtual.hp = this.pokemonAtual.hp > 100 ? 100 : this.pokemonAtual.hp
             }else{
@@ -584,16 +585,15 @@ new Vue({
             pokemon.back = './images/pokebola.gif'
             setTimeout( ()=>{
                 pokemon.back = back
-            },830)
+            },760)
         },
         animacaoTrocaDePokemonInimigo(pokemon){
             const front = pokemon.front
             pokemon.front = './images/pokebola.gif'
             console.log('chegou aq')
             setTimeout( ()=>{
-                console.log('dentro do timeout')
                 pokemon.front = front
-            },830)
+            },760)
         },
         animacaoDiminuirPokebola(enemy,array){
             let pokenumbers = array.length
@@ -608,8 +608,8 @@ new Vue({
             if(this.time){
                 this.time.forEach(pokemon =>{
                     if(!pokemon.defeated){
-                        this.pokemonAtual = pokemon
                         this.animacaoTrocaDePokemon(pokemon)
+                        this.pokemonAtual = pokemon
                         return
                     }
                 })
@@ -619,8 +619,8 @@ new Vue({
             if(this.timeInimigo){
                 this.timeInimigo.forEach(pokemon =>{
                     if(!pokemon.defeated){
-                        this.pokemonInimigoAtual = pokemon
                         this.animacaoTrocaDePokemonInimigo(pokemon)
+                        this.pokemonInimigoAtual = pokemon
                         return false
                     }
                 })

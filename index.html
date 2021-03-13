@@ -55,7 +55,12 @@
                 class="options button" 
                 @click="iniciarAtk(atk)">
                 <div class="dropdown-trigger">
-                  <button class="button" aria-haspopup="true" aria-controls="dropdown-menu4">
+                  <button 
+                  class="button" 
+                  aria-haspopup="true" 
+                  aria-controls="dropdown-menu4"
+                  :disabled="atk.pp == 0"
+                  >
                     <span>{{key}}</span>
                     <span class="icon is-small">
                       <i class="fas fa-angle-down" aria-hidden="true"></i>
@@ -98,7 +103,12 @@
                     @click="heal(key)">
 
                     <div class="dropdown-trigger">
-                      <button class="button" aria-haspopup="true" aria-controls="dropdown-menu4">
+                      <button 
+                      class="button" 
+                      aria-haspopup="true" 
+                      aria-controls="dropdown-menu4"
+                      :disabled="healItem.quantity == 0"
+                      >
                         <span>{{key}}</span>
                         <span class="icon is-small">
                           <i class="fas fa-angle-down" aria-hidden="true"></i>
