@@ -8,8 +8,10 @@
 <body>
     <div id="app">
         <div id="battleDiv">
-            <img :src="pokemonAtual.back" id="pokeSprite" :style="pokemon1Css">
-            <img :src="pokemonInimigoAtual.front" id="enemyPokeSprite" :style="pokemon2Css">
+            <img :src="gifPokebola" v-show="pokemonInvoked" id="pokeSprite" :style="pokemon1Css">
+            <img :src="pokemonAtual.back" v-show="!pokemonInvoked" id="pokeSprite" :style="pokemon1Css">
+            <img :src="gifPokebola" v-show="enemyPokemonInvoked" id="enemyPokeSprite" :style="pokemon2Css">
+            <img :src="pokemonInimigoAtual.front" v-show="!enemyPokemonInvoked" id="enemyPokeSprite" :style="pokemon2Css">
     
             <div class="statusBar p1">
                 
@@ -156,5 +158,6 @@
           </div>
     </div>
 </body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js" integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ==" crossorigin="anonymous"></script>
 <script src="./script/pokemon.js"></script>
 <script src="script/vue.js"></script>

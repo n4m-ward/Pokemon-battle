@@ -428,7 +428,11 @@ new Vue({
         pokemonInimigoAtual: {},
         bottomLogMessages:[],
         pokebolaAtual: [],
-        pokebolaInimiga: []
+        pokebolaInimiga: [],
+        axiosPokemons: [],
+        pokemonInvoked: false,
+        enemyPokemonInvoked: false,
+        gifPokebola:'./images/pokebola.gif'
 
     },
     watch:{
@@ -438,6 +442,10 @@ new Vue({
         pokebolaInimiga(antigo,novo){
             this.animacaoDiminuirPokebola(true,novo)
         }
+    },
+    async created(){
+        const pokemons = await axios.get('https://pokeapi.co/api/v2/pokemon?limit=100&offset=200')
+        this.axiosPokemons = pokemons
     },
     computed:{
         pokemonlifeBar1css(){
@@ -580,19 +588,17 @@ new Vue({
                 this.timeInimigo.push(this.enemyPokemons[pokemonsinimigos[index]])
             }
         },
-        animacaoTrocaDePokemon(pokemon){
-            const back = pokemon.back
-            pokemon.back = './images/pokebola.gif'
+        animacaoTrocaDePokemon(){
+            this.pokemonInvoked = true
             setTimeout( ()=>{
-                pokemon.back = back
+                this.pokemonInvoked = false
             },760)
         },
-        animacaoTrocaDePokemonInimigo(pokemon){
-            const front = pokemon.front
-            pokemon.front = './images/pokebola.gif'
+        animacaoTrocaDePokemonInimigo(){
             console.log('chegou aq')
+            this.enemyPokemonInvoked = true
             setTimeout( ()=>{
-                pokemon.front = front
+                this.enemyPokemonInvoked = false
             },760)
         },
         animacaoDiminuirPokebola(enemy,array){
@@ -608,8 +614,8 @@ new Vue({
             if(this.time){
                 this.time.forEach(pokemon =>{
                     if(!pokemon.defeated){
-                        this.animacaoTrocaDePokemon(pokemon)
                         this.pokemonAtual = pokemon
+                        this.animacaoTrocaDePokemon()
                         return
                     }
                 })
@@ -619,8 +625,8 @@ new Vue({
             if(this.timeInimigo){
                 this.timeInimigo.forEach(pokemon =>{
                     if(!pokemon.defeated){
-                        this.animacaoTrocaDePokemonInimigo(pokemon)
                         this.pokemonInimigoAtual = pokemon
+                        this.animacaoTrocaDePokemonInimigo()
                         return false
                     }
                 })
@@ -668,7 +674,7 @@ new Vue({
         },
         trocarPokemon(pokemon){
             !pokemon.fainted ? this.pokemonAtual = pokemon : alert('Não é possivel escolher um pokemon morto')
-            this.animacaoTrocaDePokemon(pokemon)
+            this.animacaoTrocaDePokemon()
             this.setBattleLog('choose',0,0,false)
             this.iniciarAtkPokemon2()
         }
