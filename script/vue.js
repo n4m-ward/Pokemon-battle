@@ -595,7 +595,6 @@ new Vue({
             },760)
         },
         animacaoTrocaDePokemonInimigo(){
-            console.log('chegou aq')
             this.enemyPokemonInvoked = true
             setTimeout( ()=>{
                 this.enemyPokemonInvoked = false
