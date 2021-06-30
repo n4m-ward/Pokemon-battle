@@ -7,6 +7,7 @@ new Vue({
         attackMenu:false,
         pokemonMenu:false,
         healMenu:false,
+        startRound: false,
         healItems:{
             potion:{
                 quantity:4,
@@ -533,14 +534,19 @@ new Vue({
             }
         },
         iniciarAtk(golpe){
-            this.diminuirVidaPoke(this.pokemonInimigoAtual,golpe,false)  
-            this.verificarTrocaDePokemonInimigo()
-            setTimeout(()=>{
-                this.iniciarAtkPokemon2()
-                this.verificarTrocaDePokemon()
-                if(this.pokemonAtual.hp == 0) this.giveUp('perdeu')
-                if(this.pokemonInimigoAtual.hp == 0) this.giveUp('ganhou')
-            },1000)
+            if(!this.startRound)
+            {
+                this.startRound = true;
+                this.diminuirVidaPoke(this.pokemonInimigoAtual,golpe,false)  
+                this.verificarTrocaDePokemonInimigo()
+                setTimeout(()=>{
+                    this.iniciarAtkPokemon2()
+                    this.verificarTrocaDePokemon()
+                    if(this.pokemonAtual.hp == 0) this.giveUp('perdeu')
+                    if(this.pokemonInimigoAtual.hp == 0) this.giveUp('ganhou')
+                    this.startRound = false;
+                },1000)
+            }
         },
         iniciarAtkPokemon2(){
             let attacksObj = this.pokemonInimigoAtual.attack

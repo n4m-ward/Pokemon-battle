@@ -61,7 +61,7 @@
                   class="button" 
                   aria-haspopup="true" 
                   aria-controls="dropdown-menu4"
-                  :disabled="atk.pp == 0"
+                  :disabled="atk.pp == 0 || startRound"
                   >
                     <span>{{key}}</span>
                     <span class="icon is-small">
@@ -147,7 +147,7 @@
                                 <label class="checkbox">
                                     <img :src="pokemon.front">
                                     <input type="checkbox" @change="criarTime(pokemon.name)">
-                                  </label>
+                                </label>
                             </div>
                         </div>
                         <button class="button is-primary is-outlined" @click="confirmarTime">Confirmar Time</button>
